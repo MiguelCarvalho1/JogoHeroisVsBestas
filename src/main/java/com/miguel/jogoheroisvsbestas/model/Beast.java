@@ -1,4 +1,17 @@
 package com.miguel.jogoheroisvsbestas.model;
 
-public class Beast {
+public abstract class Beast extends Character {
+    public Beast(String name, int health, int armor) {
+        super(name, health, armor);
+    }
+
+    @Override
+    public int calculateAttack() {
+        return  (int) (Math.random() * 91);
+    }
+
+    @Override
+    public int calculateDefense(int attackPower, Character opponent) {
+        return attackPower > armor ? attackPower - armor : 0;
+    }
 }
