@@ -11,7 +11,7 @@ public abstract class Character {
         this.armor = armor;
     }
 
-    public abstract int calculateAttack();
+    public abstract int calculateAttack(Character opponent);
     public abstract int calculateDefense(int attackPower, Character opponent);
 
     public boolean isAlive(){

@@ -6,7 +6,7 @@ public abstract class Hero  extends Character{
     }
 
     @Override
-    public int calculateAttack() {
+    public int calculateAttack(Character opponent) {
         int dice1 = (int) (Math.random() * 101);
         int dice2 = (int) (Math.random() * 101);
         return Math.max(dice1, dice2);
