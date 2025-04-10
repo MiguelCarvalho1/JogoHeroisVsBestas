@@ -51,7 +51,7 @@ public class BattleController {
     }
 
     @FXML
-    public void addHero() {
+    private void addHero() {
         try {
 
             String name = heroNameField.getText();
@@ -67,15 +67,85 @@ public class BattleController {
 
         } catch (NumberFormatException e) {
             showAlert("Erro!", "Por favor, insira valores númericos válidos para vida e armadura", Alert.AlertType.ERROR);
+        }catch (Exception e) {
+            showAlert("Erro!", e.getMessage(), Alert.AlertType.ERROR);
         }
 
+    }
+
+    @FXML
+    private void addBeast(){
+        try{
+            String name = beastNameField.getText();
+            int health = Integer.parseInt(beastHealthField.getText());
+            int armor = Integer.parseInt(beastArmorField.getText());
+            String type = beastTypeCombo.getValue();
+
+            Character beast = createBeast(type, name, health, armor);
+            //beast.addCharacter(beast);
+
+        }catch (NumberFormatException e){
+            showAlert("Erro!", "Por favor, insira valores numéricos válidos para vida e armadura.", Alert.AlertType.ERROR);
+        }catch (Exception e) {
+            showAlert("Erro!", e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void startBattle(){
+        battleLog.clear();
+        battleLog.add("A batalha começou!!");
+        updateBattleLog();
+
+        int turn = 1;
+        while(/*heroes.hasAliveCharacters() && beasts.hasAliveCharacters()*/){
+            battleLog.add("\n Turno " + turn + ": ");
+            fightTurn();
+            //heroes.removeDeadCharacters();
+            //beasts.removeDeadCharacters();
+            updateBattleLog();
+            turn++;
+        }
+        if(/*heroes.hasAliveCharacters()*/){
+            battleLog.add("\nVITÓRIA DOS HERÓIS!");
+        }else {
+            battleLog.add("\nVITÓRIA DAS BESTAS!");
+        }
+        updateBattleLog();
+    }
+
+    @FXML
+    private void rest(){
+        heroes = new Army(/*"Heróis"*/);
+        beasts = new Army(/*"Bestas"*/);
+        battleLog.clear();
+        battleLogArea.clear();
+    }
+
+    private void fightTurn() {
+    }
+
+    private void updateBattleLog() {
+    }
+
+    private Character createBeast(String type, String name, int health, int armor) {
+        switch (type) {
+           // case "Orque": return new Orc(name, health, armor);
+           // case "Troll": return new Troll(name, health, armor);
+            default: throw new IllegalArgumentException("Tipo de besta inválido");
+        }
     }
 
     private void clearHeroFields() {
     }
 
     private Character createHero(String type, String name, int health, int armor) {
-        return null;
+       switch (type){
+          // case "Elfo": return new Elf(name, health, armor);
+          // case "Hobbit": return new Hobbit(name, health, armor);
+          // case "Humano": return new Human(name, health, armor);
+           default: throw new IllegalArgumentException("Tipo de herói inválido");
+       }
     }
 
     private void showAlert(String s, String s1, Alert.AlertType alertType) {
