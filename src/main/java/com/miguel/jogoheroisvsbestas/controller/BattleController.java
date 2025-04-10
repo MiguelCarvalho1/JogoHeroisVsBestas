@@ -121,32 +121,68 @@ public class BattleController {
         battleLog.clear();
         battleLogArea.clear();
     }
-
-    private void fightTurn() {
-    }
-
-    private void updateBattleLog() {
-    }
-
     private Character createBeast(String type, String name, int health, int armor) {
         switch (type) {
-           // case "Orque": return new Orc(name, health, armor);
-           // case "Troll": return new Troll(name, health, armor);
+            // case "Orque": return new Orc(name, health, armor);
+            // case "Troll": return new Troll(name, health, armor);
             default: throw new IllegalArgumentException("Tipo de besta inválido");
         }
     }
+    private Character createHero(String type, String name, int health, int armor) {
+        switch (type){
+            // case "Elfo": return new Elf(name, health, armor);
+            // case "Hobbit": return new Hobbit(name, health, armor);
+            // case "Humano": return new Human(name, health, armor);
+            default: throw new IllegalArgumentException("Tipo de herói inválido");
+        }
+    }
+
+    private void fightTurn() {
+       // List<Character> heroesList = heroes.getCharacters();
+       // List<Character> beastsList = beasts.getCharacters();
+
+    }
+    private void fight(Character hero, Character beast){
+        int heroAttack = hero.calculateAttack();
+        int damageToBeast = beast.calculateDefense(heroAttack, hero);
+        beast.takeDamage(damageToBeast);
+
+        String heroAttackMsg = String.format("%s ataca %s com %d de poder. %s sofre %d de dano.",
+                hero.getName(), beast.getName(), heroAttack, beast.getName(), damageToBeast);
+        battleLog.add(heroAttackMsg);
+
+        if(beast.isAlive()){
+            int beastAttack = beast.calculateAttack();
+            int damageToHero = hero.calculateDefense(beastAttack, beast);
+            hero.takeDamage(damageToHero);
+
+            String beastAttackMsg = String.format("%s contra-ataca %s com %d de poder. %s sofre %d de dano.",
+                    beast.getName(), hero.getName(), beastAttack, hero.getName(), damageToHero);
+            battleLog.add(beastAttackMsg);
+        }
+
+        if (!hero.isAlive()) {
+            battleLog.add(hero.getName() + " morreu!");
+        }
+        if (!beast.isAlive()) {
+            battleLog.add(beast.getName() + " morreu!");
+        }
+
+    }
+
+    private void updateBattleLog() {
+        battleLog.clear();
+        for(String log : battleLog){
+            battleLogArea.appendText(log + "\n");
+        }
+    }
+
+
 
     private void clearHeroFields() {
     }
 
-    private Character createHero(String type, String name, int health, int armor) {
-       switch (type){
-          // case "Elfo": return new Elf(name, health, armor);
-          // case "Hobbit": return new Hobbit(name, health, armor);
-          // case "Humano": return new Human(name, health, armor);
-           default: throw new IllegalArgumentException("Tipo de herói inválido");
-       }
-    }
+
 
     private void showAlert(String s, String s1, Alert.AlertType alertType) {
     }
