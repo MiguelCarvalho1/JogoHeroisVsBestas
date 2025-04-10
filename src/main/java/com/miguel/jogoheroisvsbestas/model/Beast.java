@@ -6,7 +6,7 @@ public abstract class Beast extends Character {
     }
 
     @Override
-    public int calculateAttack() {
+    public int calculateAttack(Character opponent) {
         return  (int) (Math.random() * 91);
     }
 
