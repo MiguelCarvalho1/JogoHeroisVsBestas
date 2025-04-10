@@ -115,7 +115,7 @@ public class BattleController {
     }
 
     @FXML
-    private void rest(){
+    private void reset(){
         heroes = new Army(/*"Heróis"*/);
         beasts = new Army(/*"Bestas"*/);
         battleLog.clear();
