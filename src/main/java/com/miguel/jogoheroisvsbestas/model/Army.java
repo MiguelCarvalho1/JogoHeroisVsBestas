@@ -29,4 +29,12 @@ public class Army {
     public String getName() {
         return name;
     }
+
+    public List<String> getCharacterNames() {
+        List<String> names = new ArrayList<>();
+        for (Character character : characters) {
+            names.add(character.getName());  // Chama o método getName() da classe Character
+        }
+        return names;
+    }
 }

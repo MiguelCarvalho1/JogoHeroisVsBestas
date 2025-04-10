@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.miguel.jogoheroisvsbestas.controller.BattleController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <top>
+        <HBox spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <!-- Painel de Heróis -->
+            <VBox spacing="10" style="-fx-border-color: #3498db; -fx-border-width: 2; -fx-border-radius: 5;">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Adicionar Herói" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+
+                <ComboBox fx:id="heroTypeCombo" promptText="Tipo de Herói">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Elfo"/>
+                            <String fx:value="Hobbit"/>
+                            <String fx:value="Humano"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+
+                <TextField fx:id="heroNameField" promptText="Nome"/>
+                <TextField fx:id="heroHealthField" promptText="Pontos de Vida"/>
+                <TextField fx:id="heroArmorField" promptText="Armadura"/>
+
+                <Button text="Adicionar Herói" onAction="#addHero" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+            </VBox>
+
+            <!-- Painel de Bestas -->
+            <VBox spacing="10" style="-fx-border-color: #e74c3c; -fx-border-width: 2; -fx-border-radius: 5;">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Adicionar Besta" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+
+                <ComboBox fx:id="beastTypeCombo" promptText="Tipo de Besta">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Orque"/>
+                            <String fx:value="Troll"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+
+                <TextField fx:id="beastNameField" promptText="Nome"/>
+                <TextField fx:id="beastHealthField" promptText="Pontos de Vida"/>
+                <TextField fx:id="beastArmorField" promptText="Armadura"/>
+
+                <Button text="Adicionar Besta" onAction="#addBeast" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+            </VBox>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="20" alignment="CENTER">
+            <!-- Coluna 1: Campo de Batalha -->
+            <ScrollPane style="-fx-background-color: transparent; -fx-border-width: 0;"
+                        hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" prefWidth="400.0">
+                <content>
+                    <TextArea fx:id="battleLogArea" editable="false" wrapText="true"
+                              style="-fx-font-family: 'Courier New'; -fx-font-size: 14; -fx-pref-width: 500; -fx-pref-height: 200;"/>
+                </content>
+            </ScrollPane>
+
+            <!-- Coluna 2: Lista de Heróis e Bestas -->
+            <VBox spacing="10" style="-fx-border-color: #3498db; -fx-border-width: 2; -fx-border-radius: 5;" prefWidth="150.0">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Heróis" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                <ListView fx:id="heroListView" prefHeight="150.0"/>
+                <Label text="Bestas" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                <ListView fx:id="beastListView" prefHeight="150.0"/>
+            </VBox>
+        </HBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <TextField fx:id="maxTurnsField" promptText="Máximo de Turnos" style="-fx-font-size: 14; -fx-padding: 10 20;"/>
+
+            <Button text="Iniciar Batalha" onAction="#startBattle" style="-fx-font-size: 16; -fx-padding: 10 20;"/>
+            <Button text="Reiniciar" onAction="#reset" style="-fx-font-size: 16; -fx-padding: 10 20;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
