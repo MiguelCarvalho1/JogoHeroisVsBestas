@@ -40,8 +40,8 @@ public class BattleController {
 
     @FXML
     public void initialize() {
-        heroes = new Army(/*"Heróis"*/);
-        beasts = new Army(/*"Bestas"*/);
+        heroes = new Army("Heróis");
+        beasts = new Army("Bestas");
         battleLog = new ArrayList<>();
 
         hereoTypeCombo.getSelectionModel().selectFirst();
@@ -60,7 +60,7 @@ public class BattleController {
             String type = hereoTypeCombo.getValue();
 
             Character hero = createHero(type, name, health,armor);
-            //hero.addCharacter(hero);
+            heroes.addCharacter(hero);
 
             showAlert("Sucesso", "Herói adicionado: " + name, Alert.AlertType.INFORMATION);
             clearHeroFields();
@@ -82,7 +82,7 @@ public class BattleController {
             String type = beastTypeCombo.getValue();
 
             Character beast = createBeast(type, name, health, armor);
-            //beast.addCharacter(beast);
+            beasts.addCharacter(beast);
 
         }catch (NumberFormatException e){
             showAlert("Erro!", "Por favor, insira valores numéricos válidos para vida e armadura.", Alert.AlertType.ERROR);
@@ -98,15 +98,15 @@ public class BattleController {
         updateBattleLog();
 
         int turn = 1;
-        while(/*heroes.hasAliveCharacters() && beasts.hasAliveCharacters()*/){
+        while(heroes.hasAliveCharacters() && beasts.hasAliveCharacters()){
             battleLog.add("\n Turno " + turn + ": ");
             fightTurn();
-            //heroes.removeDeadCharacters();
-            //beasts.removeDeadCharacters();
+            heroes.removeDeadCharacters();
+            beasts.removeDeadCharacters();
             updateBattleLog();
             turn++;
         }
-        if(/*heroes.hasAliveCharacters()*/){
+        if(heroes.hasAliveCharacters()){
             battleLog.add("\nVITÓRIA DOS HERÓIS!");
         }else {
             battleLog.add("\nVITÓRIA DAS BESTAS!");
@@ -116,34 +116,34 @@ public class BattleController {
 
     @FXML
     private void reset(){
-        heroes = new Army(/*"Heróis"*/);
-        beasts = new Army(/*"Bestas"*/);
+        heroes = new Army("Heróis");
+        beasts = new Army("Bestas");
         battleLog.clear();
         battleLogArea.clear();
     }
     private Character createBeast(String type, String name, int health, int armor) {
         switch (type) {
-            // case "Orque": return new Orc(name, health, armor);
-            // case "Troll": return new Troll(name, health, armor);
+             case "Orque": return new Orc(name, health, armor);
+            case "Troll": return new Troll(name, health, armor);
             default: throw new IllegalArgumentException("Tipo de besta inválido");
         }
     }
     private Character createHero(String type, String name, int health, int armor) {
         switch (type){
-            // case "Elfo": return new Elf(name, health, armor);
-            // case "Hobbit": return new Hobbit(name, health, armor);
-            // case "Humano": return new Human(name, health, armor);
+             case "Elfo": return new Elf(name, health, armor);
+             case "Hobbit": return new Hobbit(name, health, armor);
+            case "Humano": return new Human(name, health, armor);
             default: throw new IllegalArgumentException("Tipo de herói inválido");
         }
     }
 
     private void fightTurn() {
-       // List<Character> heroesList = heroes.getCharacters();
-       // List<Character> beastsList = beasts.getCharacters();
+        List<Character> heroesList = heroes.getCharacters();
+        List<Character> beastsList = beasts.getCharacters();
 
     }
     private void fight(Character hero, Character beast){
-        int heroAttack = hero.calculateAttack();
+        int heroAttack = hero.calculateAttack(beast);
         int damageToBeast = beast.calculateDefense(heroAttack, hero);
         beast.takeDamage(damageToBeast);
 
@@ -152,7 +152,7 @@ public class BattleController {
         battleLog.add(heroAttackMsg);
 
         if(beast.isAlive()){
-            int beastAttack = beast.calculateAttack();
+            int beastAttack = beast.calculateAttack(hero);
             int damageToHero = hero.calculateDefense(beastAttack, beast);
             hero.takeDamage(damageToHero);
 

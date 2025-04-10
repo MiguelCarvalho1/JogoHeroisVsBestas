@@ -11,7 +11,9 @@ public class Army {
         this.name = name;
     }
     public void addCharacter(Character character) {
-        characters.add(character);
+        if (character != null) {
+            characters.add(character);
+        }
     }
     public void removeDeadCharacters(){
         characters.removeIf(c -> !c.isAlive());
