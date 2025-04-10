@@ -180,10 +180,18 @@ public class BattleController {
 
 
     private void clearHeroFields() {
+        heroNameField.clear();
+        heroHealthField.clear();
+        heroArmorField.clear();
     }
 
 
 
-    private void showAlert(String s, String s1, Alert.AlertType alertType) {
+    private void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

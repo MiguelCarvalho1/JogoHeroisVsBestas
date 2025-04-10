@@ -1,0 +1,50 @@
+/* Variáveis CSS */
+.general-padding{
+    -fx-padding: 10px;
+}
+
+/* Estilos gerais */
+.root {
+    -fx-font-family: "Arial";
+    -fx-base: #ecf0f1;
+
+}
+
+.button {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
+}
+
+.button:hover {
+    -fx-opacity: 0.8;
+}
+
+.text-area {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 12px;
+}
+
+.text-field, .combo-box {
+    -fx-pref-width: 200px;
+}
+
+/* Painéis temáticos */
+.hero-panel {
+    -fx-background-color: #d6eaf8;
+    -fx-border-color: #3498db;
+}
+
+.beast-panel {
+    -fx-background-color: #fadbd8;
+    -fx-border-color: #e74c3c;
+}
+
+/* Botões temáticos */
+.button.hero-button {
+    -fx-background-color: #3498db;
+}
+
+.button.beast-button {
+    -fx-background-color: #e74c3c;
+}
