@@ -3,11 +3,14 @@ package com.miguel.jogoheroisvsbestas.controller;
 import com.miguel.jogoheroisvsbestas.battle.BattleManager;
 import com.miguel.jogoheroisvsbestas.model.*;
 import com.miguel.jogoheroisvsbestas.model.Character;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import javafx.util.Duration;
 import java.util.*;
 
 
@@ -187,6 +190,9 @@ public class BattleController {
 
         battleLog.addAll(manager.getBattleLog());
         updateBattleLog();
+
+        List<String> animatedLog = manager.getBattleLog();
+        animateBattleLog(animatedLog);
     }
 
     @FXML
@@ -288,5 +294,24 @@ public class BattleController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+
+    private void animateBattleLog(List<String> logEntries) {
+        battleLogArea.clear();
+
+        Timeline timeline = new Timeline();
+        Duration delay = Duration.seconds(0.5); // meio segundo entre cada log
+        Duration time = Duration.ZERO;
+
+        for (String entry : logEntries) {
+            KeyFrame keyFrame = new KeyFrame(time, event -> {
+                battleLogArea.appendText(entry + "\n");
+            });
+            timeline.getKeyFrames().add(keyFrame);
+            time = time.add(delay);
+        }
+
+        timeline.play();
     }
 }
