@@ -6,4 +6,6 @@ module com.miguel.jogoheroisvsbestas {
     opens com.miguel.jogoheroisvsbestas.controller to javafx.fxml;
     exports com.miguel.jogoheroisvsbestas;
     exports com.miguel.jogoheroisvsbestas.controller;
+    exports com.miguel.jogoheroisvsbestas.battle;
+    opens com.miguel.jogoheroisvsbestas.battle to javafx.fxml;
 }

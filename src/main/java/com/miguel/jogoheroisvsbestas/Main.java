@@ -21,7 +21,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
         Parent root = fxmlLoader.load();
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 600, 600);
 
         // Verifica se o CSS existe antes de adicionar
         URL cssUrl = getClass().getResource("style.css");

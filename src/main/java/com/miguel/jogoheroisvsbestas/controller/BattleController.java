@@ -1,5 +1,6 @@
 package com.miguel.jogoheroisvsbestas.controller;
 
+import com.miguel.jogoheroisvsbestas.battle.BattleManager;
 import com.miguel.jogoheroisvsbestas.model.*;
 import com.miguel.jogoheroisvsbestas.model.Character;
 import javafx.collections.FXCollections;
@@ -160,26 +161,31 @@ public class BattleController {
 
 
     @FXML
-    private void startBattle(){
+    private void startBattle() {
         battleLog.clear();
-        battleLog.add("A batalha começou!!");
-        updateBattleLog();
 
-        int maxTurns = Integer.parseInt(maxTurnsField.getText().trim());
-        int turn = 1;
-        while(turn <= maxTurns && heroes.hasAliveCharacters() && beasts.hasAliveCharacters()){
-            battleLog.add("\n Turno " + turn + ": ");
-            fightTurn();
-            heroes.removeDeadCharacters();
-            beasts.removeDeadCharacters();
-            updateBattleLog();
-            turn++;
+        String maxTurnsText = maxTurnsField.getText().trim();
+        if (maxTurnsText.isEmpty()) {
+            showAlert("Erro!", "Por favor, insira o número máximo de turnos.", Alert.AlertType.ERROR);
+            return;
         }
-        if(heroes.hasAliveCharacters()){
-            battleLog.add("\nVITÓRIA DOS HERÓIS!");
-        }else {
-            battleLog.add("\nVITÓRIA DAS BESTAS!");
+
+        int maxTurns;
+        try {
+            maxTurns = Integer.parseInt(maxTurnsText);
+            if (maxTurns < 1) {
+                showAlert("Erro!", "O número de turnos deve ser maior que zero.", Alert.AlertType.ERROR);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Erro!", "Por favor, insira um número válido para os turnos.", Alert.AlertType.ERROR);
+            return;
         }
+
+        BattleManager manager = new BattleManager(heroes, beasts);
+        manager.startBattle(maxTurns);
+
+        battleLog.addAll(manager.getBattleLog());
         updateBattleLog();
     }
 
