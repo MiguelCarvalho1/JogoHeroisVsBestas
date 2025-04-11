@@ -21,10 +21,10 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
         Parent root = fxmlLoader.load();
 
-        Scene scene = new Scene(root, 600, 600);
+        Scene scene = new Scene(root, 1200, 800);
 
         // Verifica se o CSS existe antes de adicionar
-        URL cssUrl = getClass().getResource("style.css");
+        URL cssUrl = getClass().getResource("/com/miguel/jogoheroisvsbestas/style.css");
         if (cssUrl != null) {
             scene.getStylesheets().add(cssUrl.toExternalForm());
         } else {

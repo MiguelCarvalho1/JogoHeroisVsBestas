@@ -1,109 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.collections.FXCollections?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.miguel.jogoheroisvsbestas.controller.BattleController"
-            prefHeight="600.0" prefWidth="600.0">
+            stylesheets="../style.css">
 
     <top>
-        <HBox spacing="20" alignment="CENTER">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-
+        <HBox spacing="20" alignment="CENTER" styleClass="general-padding">
             <!-- Painel de Heróis -->
-            <VBox spacing="10" style="-fx-border-color: #3498db; -fx-border-width: 2; -fx-border-radius: 5;">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
+            <VBox spacing="10" styleClass="hero-panel">
+                <Label text="Adicionar Herói" styleClass="panel-title"/>
 
-                <Label text="Adicionar Herói" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
-
-                <ComboBox fx:id="heroTypeCombo" promptText="Tipo de Herói">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Elfo"/>
-                            <String fx:value="Hobbit"/>
-                            <String fx:value="Humano"/>
-                        </FXCollections>
-                    </items>
-                </ComboBox>
-
+                <ComboBox fx:id="heroTypeCombo" promptText="Tipo de Herói"/>
                 <TextField fx:id="heroNameField" promptText="Nome"/>
                 <TextField fx:id="heroHealthField" promptText="Pontos de Vida"/>
                 <TextField fx:id="heroArmorField" promptText="Armadura"/>
 
-                <Button text="Adicionar Herói" onAction="#addHero" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+                <Button text="Adicionar Herói" onAction="#addHero" styleClass="hero-button"/>
             </VBox>
 
             <!-- Painel de Bestas -->
-            <VBox spacing="10" style="-fx-border-color: #e74c3c; -fx-border-width: 2; -fx-border-radius: 5;">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
+            <VBox spacing="10" styleClass="beast-panel">
+                <Label text="Adicionar Besta" styleClass="panel-title"/>
 
-                <Label text="Adicionar Besta" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
-
-                <ComboBox fx:id="beastTypeCombo" promptText="Tipo de Besta">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Orque"/>
-                            <String fx:value="Troll"/>
-                        </FXCollections>
-                    </items>
-                </ComboBox>
-
+                <ComboBox fx:id="beastTypeCombo" promptText="Tipo de Besta"/>
                 <TextField fx:id="beastNameField" promptText="Nome"/>
                 <TextField fx:id="beastHealthField" promptText="Pontos de Vida"/>
                 <TextField fx:id="beastArmorField" promptText="Armadura"/>
 
-                <Button text="Adicionar Besta" onAction="#addBeast" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+                <Button text="Adicionar Besta" onAction="#addBeast" styleClass="beast-button"/>
             </VBox>
         </HBox>
     </top>
 
     <center>
-        <HBox spacing="20" alignment="CENTER">
-            <!-- Coluna 1: Campo de Batalha -->
-            <ScrollPane style="-fx-background-color: transparent; -fx-border-width: 0;"
-                        hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" prefWidth="400.0">
-                <content>
-                    <TextArea fx:id="battleLogArea" editable="false" wrapText="true"
-                              style="-fx-font-family: 'Courier New'; -fx-font-size: 14; -fx-pref-width: 500; -fx-pref-height: 200;"/>
-                </content>
+        <SplitPane dividerPositions="0.5, 0.75" >
+            <!-- Top: Battle Log -->
+            <ScrollPane>
+                <TextFlow fx:id="battleLogFlow" styleClass="battle-log"/>
             </ScrollPane>
 
-            <!-- Coluna 2: Lista de Heróis e Bestas -->
-            <VBox spacing="10" style="-fx-border-color: #3498db; -fx-border-width: 2; -fx-border-radius: 5;" prefWidth="150.0">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
+            <!-- Bottom: Character Lists and Details -->
+            <HBox spacing="20">
+                <!-- Left: Heroes -->
+                <VBox spacing="10" styleClass="hero-panel" minWidth="300">
+                    <Label text="Heróis" styleClass="panel-title"/>
+                    <ListView fx:id="heroListView" styleClass="character-list"/>
+                    <HBox spacing="10">
+                        <Button text="Remover Selecionado" onAction="#removeSelectedHero" styleClass="hero-button"/>
+                    </HBox>
 
-                <Label text="Heróis" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
-                <ListView fx:id="heroListView" prefHeight="150.0"/>
-                <Label text="Bestas" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
-                <ListView fx:id="beastListView" prefHeight="150.0"/>
-            </VBox>
-        </HBox>
+                    <VBox fx:id="heroDetailsBox" spacing="5" styleClass="character-details" maxHeight="500">
+                        <Label text="Detalhes do Herói:" styleClass="details-title"/>
+                        <ProgressBar fx:id="heroHealthBar" prefWidth="200"/>
+                        <Label fx:id="heroStatsLabel" styleClass="stats-label"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Right: Beasts -->
+                <VBox spacing="10" styleClass="beast-panel" minWidth="300">
+                    <Label text="Bestas" styleClass="panel-title"/>
+                    <ListView fx:id="beastListView" styleClass="character-list"/>
+                    <HBox spacing="10">
+                        <Button text="Remover Selecionado" onAction="#removeSelectedBeast" styleClass="beast-button"/>
+                    </HBox>
+
+                    <VBox fx:id="beastDetailsBox" spacing="5" styleClass="character-details" maxHeight="500">
+                        <Label text="Detalhes da Besta:" styleClass="details-title"/>
+                        <ProgressBar fx:id="beastHealthBar" prefWidth="200"/>
+                        <Label fx:id="beastStatsLabel" styleClass="stats-label"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </SplitPane>
     </center>
 
     <bottom>
-        <HBox spacing="20" alignment="CENTER">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <TextField fx:id="maxTurnsField" promptText="Máximo de Turnos" style="-fx-font-size: 14; -fx-padding: 10 20;"/>
-
-            <Button text="Iniciar Batalha" onAction="#startBattle" style="-fx-font-size: 16; -fx-padding: 10 20;"/>
-            <Button text="Reiniciar" onAction="#reset" style="-fx-font-size: 16; -fx-padding: 10 20;"/>
+        <HBox spacing="20" alignment="CENTER" styleClass="general-padding">
+            <TextField fx:id="maxTurnsField" promptText="Máximo de Turnos" styleClass="turn-input"/>
+            <Button fx:id="startBattleButton" text="Iniciar Batalha" onAction="#startBattle" styleClass="battle-button"/>
+            <Button fx:id="resetButton" text="Reiniciar" onAction="#reset" styleClass="reset-button"/>
         </HBox>
     </bottom>
-
 </BorderPane>

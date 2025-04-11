@@ -7,7 +7,7 @@ public class Orc extends Beast{
 
     @Override
     public int calculateDefense(int attackPower, Character opponent) {
-        int modifedArmor = (int)(opponent.getArmor() *0.9);
-        return attackPower > modifedArmor ? modifedArmor : 0;
+        int modifiedArmor = (int) (opponent.getArmor() * 0.9);
+        return Math.max(0, attackPower - modifiedArmor);
     }
 }

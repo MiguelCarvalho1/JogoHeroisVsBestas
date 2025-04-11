@@ -1,40 +1,64 @@
 package com.miguel.jogoheroisvsbestas.model;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Army {
-    private List<Character> characters;
-    private String name;
+    private final List<Character> characters;
+    private final String name;
 
-    public Army( String name) {
+    public Army(String name) {
         this.characters = new ArrayList<>();
         this.name = name;
     }
+
     public void addCharacter(Character character) {
         if (character != null) {
             characters.add(character);
         }
     }
-    public void removeDeadCharacters(){
+
+    public boolean removeCharacter(Character character) {
+        return characters.remove(character);
+    }
+
+    public void removeDeadCharacters() {
         characters.removeIf(c -> !c.isAlive());
     }
 
-    public boolean hasAliveCharacters(){
-        return  characters.stream().anyMatch(Character::isAlive);
+    public boolean hasAliveCharacters() {
+        return characters.stream().anyMatch(Character::isAlive);
     }
+
     public List<Character> getCharacters() {
-        return characters;
+        return new ArrayList<>(characters);
+    }
+
+    public List<Character> getAliveCharacters() {
+        return characters.stream()
+                .filter(Character::isAlive)
+                .collect(Collectors.toList());
     }
 
     public String getName() {
         return name;
     }
 
+    public int getSize() {
+        return characters.size();
+    }
+
     public List<String> getCharacterNames() {
-        List<String> names = new ArrayList<>();
-        for (Character character : characters) {
-            names.add(character.getName());  // Chama o método getName() da classe Character
+        return characters.stream()
+                .map(c -> String.format("%s (%d/%d HP, %d ARM)",
+                        c.getName(), c.getHealth(), c.getMaxHealth(), c.getArmor()))
+                .collect(Collectors.toList());
+    }
+
+    public Character getCharacter(int index) {
+        if (index >= 0 && index < characters.size()) {
+            return characters.get(index);
         }
-        return names;
+        return null;
     }
 }
