@@ -11,17 +11,20 @@
             fx:controller="com.miguel.jogoheroisvsbestas.controller.BattleController"
             stylesheets="../style.css">
 
+    <!-- Parte superior do layout -->
     <top>
         <HBox spacing="20" alignment="CENTER" styleClass="general-padding">
             <!-- Painel de Heróis -->
             <VBox spacing="10" styleClass="hero-panel">
                 <Label text="Adicionar Herói" styleClass="panel-title"/>
 
+                <!-- Campos para adicionar um herói -->
                 <ComboBox fx:id="heroTypeCombo" promptText="Tipo de Herói"/>
                 <TextField fx:id="heroNameField" promptText="Nome"/>
                 <TextField fx:id="heroHealthField" promptText="Pontos de Vida"/>
                 <TextField fx:id="heroArmorField" promptText="Armadura"/>
 
+                <!-- Botão para adicionar o herói -->
                 <Button text="Adicionar Herói" onAction="#addHero" styleClass="hero-button"/>
             </VBox>
 
@@ -29,33 +32,38 @@
             <VBox spacing="10" styleClass="beast-panel">
                 <Label text="Adicionar Besta" styleClass="panel-title"/>
 
+                <!-- Campos para adicionar uma besta -->
                 <ComboBox fx:id="beastTypeCombo" promptText="Tipo de Besta"/>
                 <TextField fx:id="beastNameField" promptText="Nome"/>
                 <TextField fx:id="beastHealthField" promptText="Pontos de Vida"/>
                 <TextField fx:id="beastArmorField" promptText="Armadura"/>
 
+                <!-- Botão para adicionar a besta -->
                 <Button text="Adicionar Besta" onAction="#addBeast" styleClass="beast-button"/>
             </VBox>
         </HBox>
     </top>
 
+    <!-- Parte central do layout -->
     <center>
-        <SplitPane dividerPositions="0.5, 0.75" >
-            <!-- Top: Battle Log -->
+        <SplitPane dividerPositions="0.5, 0.75">
+            <!-- Topo: Log de batalha -->
             <ScrollPane>
                 <TextFlow fx:id="battleLogFlow" styleClass="battle-log"/>
             </ScrollPane>
 
-            <!-- Bottom: Character Lists and Details -->
+            <!-- Parte inferior: Listas e detalhes dos personagens -->
             <HBox spacing="20">
-                <!-- Left: Heroes -->
+                <!-- Esquerda: Heróis -->
                 <VBox spacing="10" styleClass="hero-panel" minWidth="300">
                     <Label text="Heróis" styleClass="panel-title"/>
                     <ListView fx:id="heroListView" styleClass="character-list"/>
                     <HBox spacing="10">
+                        <!-- Botão para remover o herói selecionado -->
                         <Button text="Remover Selecionado" onAction="#removeSelectedHero" styleClass="hero-button"/>
                     </HBox>
 
+                    <!-- Detalhes do herói selecionado -->
                     <VBox fx:id="heroDetailsBox" spacing="5" styleClass="character-details" maxHeight="500">
                         <Label text="Detalhes do Herói:" styleClass="details-title"/>
                         <ProgressBar fx:id="heroHealthBar" prefWidth="200"/>
@@ -63,14 +71,16 @@
                     </VBox>
                 </VBox>
 
-                <!-- Right: Beasts -->
+                <!-- Direita: Bestas -->
                 <VBox spacing="10" styleClass="beast-panel" minWidth="300">
                     <Label text="Bestas" styleClass="panel-title"/>
                     <ListView fx:id="beastListView" styleClass="character-list"/>
                     <HBox spacing="10">
+                        <!-- Botão para remover a besta selecionada -->
                         <Button text="Remover Selecionado" onAction="#removeSelectedBeast" styleClass="beast-button"/>
                     </HBox>
 
+                    <!-- Detalhes da besta selecionada -->
                     <VBox fx:id="beastDetailsBox" spacing="5" styleClass="character-details" maxHeight="500">
                         <Label text="Detalhes da Besta:" styleClass="details-title"/>
                         <ProgressBar fx:id="beastHealthBar" prefWidth="200"/>
@@ -81,10 +91,14 @@
         </SplitPane>
     </center>
 
+    <!-- Parte inferior do layout -->
     <bottom>
         <HBox spacing="20" alignment="CENTER" styleClass="general-padding">
+            <!-- Campo para definir o número máximo de turnos -->
             <TextField fx:id="maxTurnsField" promptText="Máximo de Turnos" styleClass="turn-input"/>
+            <!-- Botão para iniciar a batalha -->
             <Button fx:id="startBattleButton" text="Iniciar Batalha" onAction="#startBattle" styleClass="battle-button"/>
+            <!-- Botão para reiniciar a batalha -->
             <Button fx:id="resetButton" text="Reiniciar" onAction="#reset" styleClass="reset-button"/>
         </HBox>
     </bottom>

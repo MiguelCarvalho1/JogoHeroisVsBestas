@@ -9,49 +9,73 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BattleController implements BattleManager.BattleEventListener {
+
+    // Exércitos
     private Army heroes;
     private Army beasts;
+
+    // Log da batalha
     private List<String> battleLog;
 
+    // Campos de input de heróis
     @FXML private ComboBox<String> heroTypeCombo;
     @FXML private TextField heroNameField;
     @FXML private TextField heroHealthField;
     @FXML private TextField heroArmorField;
 
+    // Campos de input de bestas
     @FXML private ComboBox<String> beastTypeCombo;
     @FXML private TextField beastNameField;
     @FXML private TextField beastHealthField;
     @FXML private TextField beastArmorField;
 
+    // Listas de heróis e bestas
     @FXML private ListView<String> heroListView;
     @FXML private ListView<String> beastListView;
+
+    // Área de visualização do log da batalha
     @FXML private TextFlow battleLogFlow;
+
+    // Campo para definir o número máximo de turnos
     @FXML private TextField maxTurnsField;
+
+    // Barras de vida e estatísticas
     @FXML private ProgressBar heroHealthBar;
     @FXML private ProgressBar beastHealthBar;
     @FXML private Label heroStatsLabel;
     @FXML private Label beastStatsLabel;
+
+    // Botões de controlo
     @FXML private Button startBattleButton;
     @FXML private Button resetButton;
+
+    // Áreas com detalhes do personagem selecionado
     @FXML private VBox heroDetailsBox;
     @FXML private VBox beastDetailsBox;
 
+    // Lista observável para atualizar as ListViews
     private ObservableList<String> heroList = FXCollections.observableArrayList();
     private ObservableList<String> beastList = FXCollections.observableArrayList();
-    private Timeline animationTimeline;
+
+    // Referência para o personagem selecionado
     private Character selectedHero;
     private Character selectedBeast;
+
+
+    /**
+     * Método de inicialização chamado pelo JavaFX após carregar o FXML.
+     * Configura os componentes iniciais da interface.
+     */
 
     @FXML
     public void initialize() {
@@ -59,16 +83,18 @@ public class BattleController implements BattleManager.BattleEventListener {
         beasts = new Army("Bestas");
         battleLog = new ArrayList<>();
 
+        // Preenche os Combobox com os tipos disponíveis
         heroTypeCombo.setItems(FXCollections.observableArrayList("Elfo", "Hobbit", "Humano"));
         beastTypeCombo.setItems(FXCollections.observableArrayList("Orque", "Troll"));
 
         heroTypeCombo.getSelectionModel().selectFirst();
         beastTypeCombo.getSelectionModel().selectFirst();
 
+        // Liga as listas observáveis às ListViews
         heroListView.setItems(heroList);
         beastListView.setItems(beastList);
 
-        // Selection listeners for character details
+        // Listener para mostrar detalhes do herói selecionado
         heroListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 int index = heroListView.getSelectionModel().getSelectedIndex();
@@ -77,6 +103,7 @@ public class BattleController implements BattleManager.BattleEventListener {
             }
         });
 
+        // Listener para mostrar detalhes da besta selecionada
         beastListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 int index = beastListView.getSelectionModel().getSelectedIndex();
@@ -85,13 +112,14 @@ public class BattleController implements BattleManager.BattleEventListener {
             }
         });
 
-        // Initialize UI elements
+        // Inicializa UI
         heroHealthBar.setProgress(0);
         beastHealthBar.setProgress(0);
         heroStatsLabel.setText("");
         beastStatsLabel.setText("");
     }
 
+    // Atualiza os detalhes de um personagem
     private void updateCharacterDetails(Character character, VBox detailsBox, ProgressBar healthBar, Label statsLabel) {
         if (character != null) {
             healthBar.setProgress(character.getHealthPercentage());
@@ -101,12 +129,17 @@ public class BattleController implements BattleManager.BattleEventListener {
         }
     }
 
+    // Define cor da barra de vida
     private String getHealthBarStyle(double percentage) {
         if (percentage > 0.6) return "-fx-accent: green;";
         if (percentage > 0.3) return "-fx-accent: #003366;";
         return "-fx-accent: red;";
     }
-
+    /**
+     * Método para adicionar um novo herói ao exército.
+     * Valida os campos antes de criar o personagem.
+     */
+    // Adiciona um novo herói à lista
     @FXML
     private void addHero() {
         try {
@@ -131,6 +164,12 @@ public class BattleController implements BattleManager.BattleEventListener {
         }
     }
 
+    /**
+     * Método para adicionar uma nova besta ao exército.
+     * Valida os campos antes de criar o personagem.
+     */
+
+    // Adiciona uma nova besta à lista
     @FXML
     private void addBeast() {
         try {
@@ -155,6 +194,7 @@ public class BattleController implements BattleManager.BattleEventListener {
         }
     }
 
+    // Remove herói selecionado
     @FXML
     private void removeSelectedHero() {
         int index = heroListView.getSelectionModel().getSelectedIndex();
@@ -167,6 +207,7 @@ public class BattleController implements BattleManager.BattleEventListener {
         }
     }
 
+    // Remove besta selecionada
     @FXML
     private void removeSelectedBeast() {
         int index = beastListView.getSelectionModel().getSelectedIndex();
@@ -179,6 +220,7 @@ public class BattleController implements BattleManager.BattleEventListener {
         }
     }
 
+    // Inicia a batalha
     @FXML
     private void startBattle() {
         if (heroes.getSize() == 0 || beasts.getSize() == 0) {
@@ -204,18 +246,20 @@ public class BattleController implements BattleManager.BattleEventListener {
             return;
         }
 
-        // Disable buttons during battle
+        // Desativa botões durante a batalha
         startBattleButton.setDisable(true);
         resetButton.setDisable(true);
 
-        // Clear previous battle log
+        // Limpa log anterior
         battleLogFlow.getChildren().clear();
         battleLog.clear();
 
+        // Inicia batalha
         BattleManager manager = new BattleManager(heroes, beasts, this);
         manager.startBattle(maxTurns);
     }
 
+    // Restaura o estado inicial
     @FXML
     private void reset() {
         heroes = new Army("Heróis");
@@ -232,7 +276,7 @@ public class BattleController implements BattleManager.BattleEventListener {
         resetButton.setDisable(false);
     }
 
-    // BattleEventListener implementation
+    // Recebe evento da batalha para mostrar no log
     @Override
     public void onBattleEvent(String event) {
         javafx.application.Platform.runLater(() -> {
@@ -254,6 +298,7 @@ public class BattleController implements BattleManager.BattleEventListener {
         });
     }
 
+    // Atualiza estado visual quando personagem leva dano
     @Override
     public void onCharacterDamaged(Character character, int damage) {
         javafx.application.Platform.runLater(() -> {
@@ -265,6 +310,7 @@ public class BattleController implements BattleManager.BattleEventListener {
         });
     }
 
+    // Atualiza estado visual quando personagem morre
     @Override
     public void onCharacterDied(Character character) {
         javafx.application.Platform.runLater(() -> {
@@ -280,6 +326,7 @@ public class BattleController implements BattleManager.BattleEventListener {
         });
     }
 
+    // Finaliza a batalha
     @Override
     public void onBattleEnd(boolean heroesWon) {
         javafx.application.Platform.runLater(() -> {
@@ -290,6 +337,7 @@ public class BattleController implements BattleManager.BattleEventListener {
         });
     }
 
+    // Cria instância do herói
     private Character createHero(String type, String name, int health, int armor) {
         switch (type) {
             case "Elfo": return new Elf(name, health, armor);
@@ -299,6 +347,7 @@ public class BattleController implements BattleManager.BattleEventListener {
         }
     }
 
+    // Cria instância da besta
     private Character createBeast(String type, String name, int health, int armor) {
         switch (type) {
             case "Orque": return new Orc(name, health, armor);
@@ -307,6 +356,7 @@ public class BattleController implements BattleManager.BattleEventListener {
         }
     }
 
+    // Valida e converte número positivo
     private int parsePositiveInt(String text, String fieldName) throws NumberFormatException {
         int value = Integer.parseInt(text);
         if (value <= 0) {
@@ -315,6 +365,7 @@ public class BattleController implements BattleManager.BattleEventListener {
         return value;
     }
 
+    // Valida e converte número não-negativo
     private int parseNonNegativeInt(String text, String fieldName) throws NumberFormatException {
         int value = Integer.parseInt(text);
         if (value < 0) {
@@ -323,26 +374,31 @@ public class BattleController implements BattleManager.BattleEventListener {
         return value;
     }
 
+    // Atualiza lista de heróis
     private void updateHeroList() {
         heroList.setAll(heroes.getCharacterNames());
     }
 
+    // Atualiza lista de bestas
     private void updateBeastList() {
         beastList.setAll(beasts.getCharacterNames());
     }
 
+    // Limpa campos do formulário de herói
     private void clearHeroFields() {
         heroNameField.clear();
         heroHealthField.clear();
         heroArmorField.clear();
     }
 
+    // Limpa campos do formulário de besta
     private void clearBeastFields() {
         beastNameField.clear();
         beastHealthField.clear();
         beastArmorField.clear();
     }
 
+    // Mostra alerta
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
